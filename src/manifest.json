@@ -1,0 +1,24 @@
+{
+	"name": "ScriptSnap",
+	"version": "1.2.0",
+	"manifest_version": 2,
+	"description": "Reduce time spent on mundane tasks by assigning execution of any JavaScript code to keystrokes.",
+	"icons": {
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png" 
+	},
+	"options_page": "options/options.html",
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"css": ["content/css/ui.css"],
+			"js": ["content/js/zepto.js", "content/js/content-script.js"]
+		}
+	],
+	"background": {
+		"scripts": ["background/js/background.js"]
+	},
+	"permissions": [
+		"storage"
+	]
+}

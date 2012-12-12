@@ -1,0 +1,32 @@
+/* keys */
+#ext-__MSG_@@extension_id__-keys { display:none; position:fixed; left:0; top:0; z-index:9999; padding:10px;
+	background:#E4E4E4; border-radius:0 0 5px 0; border:1px solid #B6BAC0; border-top:0; border-left:0; 
+	font:12px/1.4 Arial, Helvetica, sans-serif; color:#000; text-align:left; }
+	
+#ext-__MSG_@@extension_id__-keys.active { display:block; }
+	
+	#ext-__MSG_@@extension_id__-keys ul { margin:5px 0 0 5px; padding:0; list-style:none outside; }
+		#ext-__MSG_@@extension_id__-keys ul li { margin:0 0 5px 0; list-style:none; font:12px/1.4 Arial, Helvetica, sans-serif; }
+			#ext-__MSG_@@extension_id__-keys ul li ul { display:none; margin-left:15px; }
+			#ext-__MSG_@@extension_id__-keys ul li input { display:none; margin:0; padding:0; font:12px/1.4 Arial, Helvetica, sans-serif; color:#000; }
+			#ext-__MSG_@@extension_id__-keys ul li strong { color:#000; font:bold 12px/1.4 Arial, Helvetica, sans-serif; }
+			
+			#ext-__MSG_@@extension_id__-keys ul li.active>ul { display:block; }
+			
+			#ext-__MSG_@@extension_id__-keys ul li.current,
+			#ext-__MSG_@@extension_id__-keys ul li.current>strong { color:green; }
+				#ext-__MSG_@@extension_id__-keys ul li.current ul { color:#000; }
+				#ext-__MSG_@@extension_id__-keys ul li.current>input { display:inline; }
+
+/* notifications */
+#ext-__MSG_@@extension_id__-notifications { display:none; position:absolute; left:50%; top:0; z-index:9999; width:200px; height:auto;
+	padding:3px 0; margin:0 0 0 -100px; background:#E4E4E4; border-radius:0 0 5px 5px; border:1px solid #B6BAC0; border-top:0; }
+
+#ext-__MSG_@@extension_id__-notifications.active { display:block; }
+
+	#ext-__MSG_@@extension_id__-notifications li { padding:3px 7px 2px; font:12px/1.4 Arial, Helvetica, sans-serif; color:#000; 
+		text-align:center; list-style:none outside; }
+		
+		#ext-__MSG_@@extension_id__-notifications li.e { color:red; font-weight:bold; }
+		#ext-__MSG_@@extension_id__-notifications li.w { color:darkorange; font-weight:bold; }
+		#ext-__MSG_@@extension_id__-notifications li.s { color:green; font-weight:bold; }

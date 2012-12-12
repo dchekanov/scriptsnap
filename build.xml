@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project default="build">
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="tmp" location="tmp" />
+	
+	<property name="zepto.src" value="https://raw.github.com/madrobby/zepto/master/src" />
+	<property name="beautify.src" value="https://raw.github.com/einars/js-beautify/master" />
+	<property name="codemirror.src" value="https://raw.github.com/marijnh/CodeMirror/master" />
+	
+	<target name="build">
+		<zip destfile="${build}/ext.zip" basedir="${src}" encoding="UTF-8" />
+	</target>
+	
+	<target name="update.libs" depends="zepto.update,beautify.update,codemirror.update" />
+	
+	<target name="zepto.update">
+		<concat destfile="${src}/content/js/zepto.js">
+			<url url="${zepto.src}/zepto.js" />
+			<url url="${zepto.src}/event.js" />
+			<url url="${zepto.src}/fx.js" />
+			<url url="${zepto.src}/fx_methods.js" />
+			<url url="${zepto.src}/ajax.js" />
+			<url url="${zepto.src}/form.js" />
+			<url url="${zepto.src}/data.js" />
+			<url url="${zepto.src}/selector.js" />
+			<url url="${zepto.src}/stack.js" />
+		</concat>
+	</target>
+	
+	<target name="beautify.update">
+		<get src="${beautify.src}/beautify.js" dest="${src}/options/js/editor/beautify.js" />
+	</target>
+	
+	<target name="codemirror.update">
+		<concat destfile="${src}/options/js/editor/codemirror.js">
+			<url url="${codemirror.src}/lib/codemirror.js" />
+			<url url="${codemirror.src}/mode/javascript/javascript.js" />
+			<url url="${codemirror.src}/lib/util/searchcursor.js" />
+			<url url="${codemirror.src}/lib/util/match-highlighter.js" />
+		</concat>
+		<get src="${codemirror.src}/lib/codemirror.css" dest="${src}/options/css/editor/codemirror.css" />
+	</target>
+</project>
