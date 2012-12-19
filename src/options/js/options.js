@@ -37,9 +37,13 @@ var options = {
  			}, function() {
  				form.find('input').next('.success').remove();
  				form.find('div.title strong').addClass('success');
- 				$('<span class="success">Saved</span>').insertAfter(form.find('input') ).delay(2000).fadeOut(1000, function() {
- 					form.find('div.title strong').removeClass('success');
- 				});
+ 				$('<span class="success">Saved</span>').insertAfter(form.find('input') );
+ 				
+ 				setTimeout(function() {
+ 					form.find('span.success').fadeOut(1000, function() {
+	 					form.find('div.title strong').removeClass('success');
+	 				});
+ 				}, 2000);
  			});
  			
  			return false;
