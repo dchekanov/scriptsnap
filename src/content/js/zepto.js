@@ -337,7 +337,7 @@ var Zepto = (function() {
       return this
     },
     get: function(idx){
-      return idx === undefined ? slice.call(this) : this[idx]
+      return idx === undefined ? slice.call(this) : this[idx >= 0 ? idx : idx + this.length]
     },
     toArray: function(){ return this.get() },
     size: function(){
@@ -626,9 +626,11 @@ var Zepto = (function() {
     },
     toggleClass: function(name, when){
       return this.each(function(idx){
-        var newName = funcArg(this, name, idx, className(this))
-        ;(when === undefined ? !$(this).hasClass(newName) : when) ?
-          $(this).addClass(newName) : $(this).removeClass(newName)
+        var $this = $(this), names = funcArg(this, name, idx, className(this))
+        names.split(/\s+/g).forEach(function(klass){
+          (when === undefined ? !$this.hasClass(klass) : when) ?
+            $this.addClass(klass) : $this.removeClass(klass)
+        })
       })
     },
     scrollTop: function(){
@@ -1353,7 +1355,7 @@ window.Zepto = Zepto
     var mime = settings.accepts[dataType],
         baseHeaders = { },
         protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
-        xhr = $.ajaxSettings.xhr(), abortTimeout
+        xhr = settings.xhr(), abortTimeout
 
     if (!settings.crossDomain) baseHeaders['X-Requested-With'] = 'XMLHttpRequest'
     if (mime) {
