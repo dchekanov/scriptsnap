@@ -50,8 +50,8 @@ var ext = {
 	handleKey: function(event) {
 		var code = event.keyCode;
 		
-		// do not handle special keys
-		if ( !( [8, 13, 27].indexOf(code) != -1 || (code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code >= 65 && code <= 90) ) ) {
+		// only handle special keys for activation and navigation
+		if (ext.settings.activationCondition == '' && (!ext.ui.keys || !ext.ui.keys.hasClass('active') ) && !( [8, 13, 27].indexOf(code) != -1 || (code >= 48 && code <= 57) || (code >= 96 && code <= 105) || (code >= 65 && code <= 90) ) ) {
 			return;
 		}
 		
