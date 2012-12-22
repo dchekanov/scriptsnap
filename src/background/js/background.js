@@ -7,6 +7,54 @@ var defaults = {
 	activationCondition: ""
 };
 
+function resetSettings() {
+	chrome.storage.local.set({
+		options: {
+			config: defaults.config,
+			activationCondition: defaults.activationCondition
+		}
+	});
+	
+	getOptions(function(options) {
+		var profiles = [{
+			title: 'Default profile',
+			active: true,
+			config: options.config,
+			activationCondition: options.activationCondition
+		}];
+		setProfiles(profiles);
+	});
+}
+
+function getProfiles(callback) {
+	chrome.storage.local.get('profiles', function(content) {
+		if (typeof content.profiles == 'undefined') {
+			getOptions(function(options) {
+				var profiles = [{
+					title: 'Default profile',
+					active: true,
+					config: options.config,
+					activationCondition: options.activationCondition
+				}];
+				setProfiles(profiles);
+				callback(profiles);
+			});
+		} else {
+			callback(content.profiles);
+		}		
+	});
+}
+
+function setProfiles(profiles, callback) {
+	chrome.storage.local.set({
+		profiles: profiles
+	}, function() {
+		if (callback) {
+			callback();
+		}
+	});
+}
+
 function getOptions(callback) {
 	chrome.storage.local.get({
 		config: defaults.config,
@@ -48,17 +96,17 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 			});
 		}
 		
-		if (request.getOptions) {
-			getOptions(function(options) {
-				sendResponse(options);
+		if (request.getProfiles) {
+			getProfiles(function(profiles) {
+				sendResponse(profiles);
 			});
 			
 			return true;
 		}
 		
-		if (request.setOptions) {
-			setOptions(request.options, function() {
-				sendResponse();
+		if (request.getOptions) {
+			getOptions(function(options) {
+				sendResponse(options);
 			});
 			
 			return true;

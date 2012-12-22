@@ -19,7 +19,46 @@
 		<div class="sections">
 			<div class="section config active">
 				<h2>Configuration</h2>
+				
+				<div class="profiles">
+					<ul class="actions">
+						<li><a class="add">add</a></li>
+						<li><a class="rename">rename</a></li>
+						<li><a class="delete">delete</a></li>
+					</ul>
+				</div>
+				
 				<form action="">
+					<div>
+						<div class="title"><strong>Configuration</strong> (<a class="explain" href="#">explain</a> <a class="restore" href="#">restore default</a>):</div>
+						<p>This data is not encrypted - refrain from storing passwords etc. There is no syntax validation - in case extension wouldn't activate - check your code. Reload pages after making changes to apply those changes.</p>
+						<div class="explain">
+							
+							<p>Each possible key described as an object which name equals to key name. Key name may be an english letter (there is no dependancy on input language) or a number. List of meaningful properties:</p>
+							
+							<ul>
+								<li><strong>title</strong> - label, will be shown in UI next to the corresponding key.</li>
+								<li><strong>exec</strong> - function to be executed on Enter. </li>
+								<li><strong>url</strong> - shorhand for command to open URL. Shift + Enter opens it on a new tab.</li>
+								<li><strong>input</strong> - an object with "title" and "exec" properties. Used to add an input field to enter custom parameter for exec function.</li>
+								<li><strong>next</strong> - container for nested keys.</li>
+							</ul>
+							
+							<p>When creating complex code, the power of <a href="http://zeptojs.com/" target="_blank">Zepto</a> - a lightweight library with jQuery-compatible API is at your service.</p>
+							
+							<p>New tab with custom url can be opened by passing "openInNewTab" message via <a href="http://developer.chrome.com/extensions/messaging.html">chrome.extension.sendMessage</a>.</p>
+							
+							<p>Limitations:</p>
+							
+							<ul>
+								<li>Chrome API is not available.</li>
+								<li>There are no sync due to the Chrome restrictions on settings data size.</li>
+							</ul>
+							
+						</div>
+						<textarea class="config" name="config" rows="40" cols="80"></textarea>
+					</div>
+					<br />
 					<div>
 						<div class="title"><strong>Activation condition</strong> (<a class="explain" href="#">explain</a> <a class="restore" href="#">restore default</a>):</div>
 						<div class="explain">
@@ -41,35 +80,6 @@
 						<textarea class="config" name="activation-condition" rows="5" cols="80"></textarea>
 					</div>
 					<br />
-					<div>
-						<div class="title"><strong>Configuration</strong> (<a class="explain" href="#">explain</a> <a class="restore" href="#">restore default</a>):</div>
-						<p>This data is not encrypted - refrain from storing passwords etc. There is no syntax validation - in case extension wouldn't activate - check your code. Reload pages after making changes to apply those changes.</p>
-						<div class="explain">
-							
-							<p>Each possible key described as an object which name equals to key name. Key name may be an english letter (there is no dependancy on input language) or number. List of meaningful properties:</p>
-							
-							<ul>
-								<li><strong>title</strong> - label, will be shown in UI next to the corresponding key.</li>
-								<li><strong>exec</strong> - function to be executed on Enter. </li>
-								<li><strong>url</strong> - shorhand for command to open URL. Shift + Enters opens it on a new tab.</li>
-								<li><strong>input</strong> - an object with "title" and "exec" properties. Used to add an input field to enter custom parameter for exec function.</li>
-								<li><strong>next</strong> - container for nesting keys.</li>
-							</ul>
-							
-							<p>When creating complex code, the power of <a href="http://zeptojs.com/" target="_blank">Zepto</a> - a lightweight library with jQuery-compatible API is at your service.</p>
-							
-							<p>New tab with custom url can be opened by passing "openInNewTab" message via <a href="http://developer.chrome.com/extensions/messaging.html">chrome.extension.sendMessage</a>.</p>
-							
-							<p>Limitations:</p>
-							
-							<ul>
-								<li>Chrome API is not available.</li>
-								<li>There are no sync due to the Chrome restrictions on settings data size.</li>
-							</ul>
-							
-						</div>
-						<textarea class="config" name="config" rows="40" cols="80"></textarea>
-					</div>
 					<div class="submit">
 						<input type="submit" value="Save" />
 					</div>
@@ -92,13 +102,16 @@
 					<li>
 						General:
 						<ul>
+							<li>Profiles functionality added.</li>
+							<li>Zepto updated.</li>
 							<li>Ability to use special keys in the activation condition restored.</li>
 						</ul>
 					</li>
 					<li>
 						Options page:
 						<ul>
-							<li>Is now powered by Zepto.</li>
+							<li>Is now powered by Zepto, extension's weight reduced.</li>
+							<li>Updated editor libraries.</li>
 						</ul>
 					</li>
 				</ol>
@@ -157,8 +170,6 @@
 				<p>Initial release.</p>
 			</div>
 		</div>
-		
-		
 		
 	</body>
 </html>

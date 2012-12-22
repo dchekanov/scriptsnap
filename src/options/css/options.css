@@ -63,6 +63,12 @@ table { margin:0 0 1.335em 0; border-collapse:collapse; border-spacing:0; }
 	h1,
 	.section.config h2 { display:none; }
 	
+	div.profiles { margin:0 0 1.335em 0; }
+		div.profiles ul { display:inline; margin:0 20px 0 0; list-style:none outside; }
+			div.profiles li { display:inline; margin:0 5px 0 0; }
+			div.profiles li a { cursor:pointer; }
+			div.profiles li.active a { color:green; text-decoration:none; cursor:default; }
+	
 	div.title,
 	div.submit { margin:.667em 0; }
 	
@@ -80,8 +86,7 @@ table { margin:0 0 1.335em 0; border-collapse:collapse; border-spacing:0; }
  * CodeMirror
  * It is redefined here and not in codemirror.css to ensure the latter can be easily updated
  */
-	.CodeMirror { font-size:12px; border:1px solid #ccc; }
-	.CodeMirror-scroll { height:auto; }
+	.CodeMirror { font-size:12px; border:1px solid #ccc; height:auto; }
 	
 	span.CodeMirror-matchhighlight { background: #e9e9e9 }
 	.CodeMirror-focused span.CodeMirror-matchhighlight { background: #e7e4ff; !important }
