@@ -36,6 +36,7 @@
 		<concat destfile="${src}/options/js/editor/codemirror.js">
 			<url url="${codemirror.src}/lib/codemirror.js" />
 			<url url="${codemirror.src}/mode/javascript/javascript.js" />
+			<url url="${codemirror.src}/lib/util/matchbrackets.js" />
 			<url url="${codemirror.src}/lib/util/searchcursor.js" />
 			<url url="${codemirror.src}/lib/util/match-highlighter.js" />
 		</concat>
