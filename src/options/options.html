@@ -30,6 +30,30 @@
 				
 				<form action="">
 					<div>
+						<div class="title"><strong>URLs</strong> (<a class="explain" href="#">explain</a>):</div>
+						<div class="explain">
+							<p>This extension supports 2 kinds of profiles: <b>universal</b>, suitable for every page, and <b>URL-specific</b>, 
+								suitable only for some domains and pages.</p>
+														
+							<p>By tying profiles to specific URLs, you can have same shortcuts doing different stuff depending on where you execute them.<br />
+								It also helps to reduce complexity in config definition, make it smaller, more readable and efficient.</p>
+								
+							<p>To make current profile universal, just leave this field blank. To make it URL-specific, 
+								put a regular expression matching desirable URLs (extension does matching like this: 
+								<code>new RegExp('<i>field content</i>').test(location.href)</code>).</p>
+										
+							<p>Here is an example on how to match multiple URLs: <code>(iana.org|w3.org)</code>.</p>
+							
+							<p>In case when there are multiple profiles matching a page URL, the first of them is used.<br />
+							
+							<p>Name of a URL-specific profile is displayed in <i>italics</i>.</p>
+							<p>If you have multiple universal profiles, the last one you've edited will be used (it's name is displayed in <b>bold</b>).</p>
+							<p>URL-specific profiles have a higher priority than universal.</p>
+						</div>
+						<input class="config" name="urls" type="text" />
+					</div>
+					<br />
+					<div>
 						<div class="title"><strong>Configuration</strong> (<a class="explain" href="#">explain</a> <a class="restore" href="#">restore default</a>):</div>
 						<p>This data is not encrypted - refrain from storing passwords etc. There is no syntax validation - in case extension wouldn't activate - check your code. Reload pages after making changes to apply those changes.</p>
 						<div class="explain">
@@ -39,7 +63,7 @@
 							<ul>
 								<li><strong>title</strong> - label, will be shown in UI next to the corresponding key.</li>
 								<li><strong>exec</strong> - function to be executed on Enter. </li>
-								<li><strong>url</strong> - shorhand for command to open URL. Shift + Enter opens it on a new tab.</li>
+								<li><strong>url</strong> - shorthand for command to open URL. Shift + Enter opens it on a new tab.</li>
 								<li><strong>input</strong> - an object with "title" and "exec" properties. Used to add an input field to enter custom parameter for exec function.</li>
 								<li><strong>next</strong> - container for nested keys.</li>
 							</ul>
@@ -96,6 +120,16 @@
 			</div>
 			<div class="section history">
 				<h2>Version history</h2>
+				
+				<h3>()</h3>
+				<ol>
+					<li>
+						General:
+						<ul>
+							<li>URL-specific profiles.</li>
+						</ul>
+					</li>
+				</ol>
 				
 				<h3>1.3.0 (22.12.2012)</h3>
 				<ol>

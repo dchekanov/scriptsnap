@@ -32,7 +32,8 @@ var ext = {
 	 */
 	init: function() {
 		chrome.extension.sendMessage({
-			getOptions: true
+			getOptions: true,
+			url: location.href
 		}, function(settings) {
 			// essentially equals to "var config = { ... }"
 			eval(settings.config);

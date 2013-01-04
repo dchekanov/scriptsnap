@@ -7,45 +7,39 @@ var defaults = {
 	activationCondition: ""
 };
 
+defaults.profiles = [{
+	title: 'Default profile',
+	active: true,
+	config: defaults.config,
+	activationCondition: defaults.activationCondition,
+	//urls: ''
+}];
+
 function resetSettings() {
-	chrome.storage.local.set({
-		options: {
-			config: defaults.config,
-			activationCondition: defaults.activationCondition
-		}
-	});
-	
-	getOptions(function(options) {
-		var profiles = [{
-			title: 'Default profile',
-			active: true,
-			config: options.config,
-			activationCondition: options.activationCondition
-		}];
-		setProfiles(profiles);
-	});
+	setSettings(defaults.profiles);
 }
 
-function getProfiles(callback) {
+function getSettings(callback) {
 	chrome.storage.local.get('profiles', function(content) {
 		if (typeof content.profiles == 'undefined') {
-			getOptions(function(options) {
+			legacy.getOptions(function(options) {
 				var profiles = [{
 					title: 'Default profile',
 					active: true,
 					config: options.config,
-					activationCondition: options.activationCondition
+					activationCondition: options.activationCondition,
+					//urls: ''
 				}];
 				setProfiles(profiles);
-				callback(profiles);
+				callback(profiles, defaults);
 			});
-		} else {
-			callback(content.profiles);
+		} else {			
+			callback(content.profiles, defaults);
 		}		
 	});
 }
 
-function setProfiles(profiles, callback) {
+function setSettings(profiles, callback) {
 	chrome.storage.local.set({
 		profiles: profiles
 	}, function() {
@@ -55,30 +49,29 @@ function setProfiles(profiles, callback) {
 	});
 }
 
-function getOptions(callback) {
-	chrome.storage.local.get({
-		config: defaults.config,
-		activationCondition: defaults.activationCondition
-	}, function(content) {
-		// auto-fixing pre-1.1 config format
-		if (content.config.substring(0, 3) != 'var') {
-			content.config = 'var config = {\r\n' + content.config + '\r\n}';
-			setOptions(content);
-		}
+function getOptions(url, callback) {
+	getSettings(function(profiles) {
+		var activeProfile = null;
+		
+		profiles.some(function(profile) {
+			// first profile, tied to given URL
+			if (profile.urls && new RegExp(profile.urls).test(url) ) {
+				activeProfile = profile;
+				
+				return true;
+			}
+			
+			// otherwise, active non-tied profile
+			if (profile.active) {
+				activeProfile = profile;
+			}
+		});
 		
 		callback({
-			activationCondition: content.activationCondition,
-			config: content.config,
+			activationCondition: activeProfile.activationCondition,
+			config: activeProfile.config,
 			defaults: defaults
 		});
-	});
-}
-
-function setOptions(options, callback) {
-	chrome.storage.local.set(options, function() {
-		if (callback) {
-			callback();
-		}
 	});
 }
 
@@ -96,19 +89,32 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 			});
 		}
 		
-		if (request.getProfiles) {
-			getProfiles(function(profiles) {
-				sendResponse(profiles);
-			});
-			
-			return true;
-		}
-		
 		if (request.getOptions) {
-			getOptions(function(options) {
+			getOptions(request.url, function(options) {
 				sendResponse(options);
 			});
 			
 			return true;
 		}
 });
+
+// crutches for painless upgrading from previous versions
+var legacy = {
+	getOptions: function(callback) {
+		chrome.storage.local.get({
+			config: defaults.config,
+			activationCondition: defaults.activationCondition
+		}, function(content) {
+			// auto-fixing pre-1.1 config format
+			if (content.config.substring(0, 3) != 'var') {
+				content.config = 'var config = {\r\n' + content.config + '\r\n}';
+			}
+			
+			callback({
+				activationCondition: content.activationCondition,
+				config: content.config,
+				defaults: defaults
+			});
+		});
+	}
+};

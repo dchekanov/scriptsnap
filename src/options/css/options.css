@@ -67,7 +67,9 @@ table { margin:0 0 1.335em 0; border-collapse:collapse; border-spacing:0; }
 		div.profiles ul { display:inline; margin:0 20px 0 0; list-style:none outside; }
 			div.profiles li { display:inline; margin:0 5px 0 0; }
 			div.profiles li a { cursor:pointer; }
-			div.profiles li.active a { color:green; text-decoration:none; cursor:default; }
+			div.profiles li.current a { color:green; text-decoration:none; cursor:default; }
+			div.profiles li.active { font-weight:bold; }
+			div.profiles li.tied { font-style:italic; }
 	
 	div.title,
 	div.submit { margin:.667em 0; }
@@ -81,6 +83,8 @@ table { margin:0 0 1.335em 0; border-collapse:collapse; border-spacing:0; }
 	form span.success { font-weight:bold; margin:0 20px; }
 
 	#sections-toggler { position:absolute; right:20px; top:1.335em; cursor:pointer; }
+	
+	input[type=text] { width:50%; box-sizing:border-box; padding:2px 4px;  border:1px solid #ccc; }
 	
 /*
  * CodeMirror

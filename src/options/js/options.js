@@ -4,69 +4,110 @@
 var options = {
  	init: function() {
  		var backgroundPage = chrome.extension.getBackgroundPage(),
+ 			currentProfileIdx = -1,
  			form = $('form'),
+ 			urlsInput = $('input.config[name="urls"]'),
  			activationConditionTextarea = $('textarea.config[name="activation-condition"]'),
  			configTextarea = $('textarea.config[name="config"]'),
  			profilesContainer = $('div.profiles'),
  			profilesList = $('<ul class="profiles" />').prependTo(profilesContainer);
   		
- 		backgroundPage.getProfiles(function(profiles) {
+ 		backgroundPage.getSettings(function(profiles, defaults) {
+ 			 			
+ 			function markProfileAsActive(idx) {
+ 				profiles.forEach(function(profile) {
+ 					profile.active = false;
+ 				});
+ 				
+	 			profiles[idx].active = true;
+	 			profilesList.find('li:eq(' + idx + ')').removeClass('tied').addClass('active untied').siblings().removeClass('active');
+ 			}
  			
  			function saveSettings(callback) {
- 				profiles.some(function(profile) {
-	 				if (profile.active == true) {
-	 					profile.activationCondition = activationConditionTextarea.data('editor').getValue();
-	 					profile.config = configTextarea.data('editor').getValue();
-	 					backgroundPage.setProfiles(profiles);
-	 					
-	 					return true;
-	 				}
-	 			});
-	 			
-	 			backgroundPage.setOptions({
-	 				activationCondition: activationConditionTextarea.data('editor').getValue(),
-	 				config: configTextarea.data('editor').getValue()
-	 			}, function() {
-	 				activationConditionTextarea.data('editor').markClean();
-	 				configTextarea.data('editor').markClean();
-	 			
-	 				if (callback) {
+ 				var currentProfileListEl = profilesList.find('li:eq(' + currentProfileIdx + ')');
+ 				
+ 				profiles[currentProfileIdx].urls = urlsInput.val();
+				profiles[currentProfileIdx].activationCondition = activationConditionTextarea.data('editor').getValue();
+				profiles[currentProfileIdx].config = configTextarea.data('editor').getValue();
+				
+ 				if (profiles[currentProfileIdx].urls) {
+ 					profiles[currentProfileIdx].active = false;
+					currentProfileListEl.addClass('tied').removeClass('active untied');
+					
+					if (!profilesList.find('li.active').length) {
+						profilesList.find('li.untied:first').addClass('active');
+						profiles[profilesList.find('li.untied:first').index()].active = true;
+					}
+				} else {
+					markProfileAsActive(currentProfileIdx);
+				}
+				
+				backgroundPage.setSettings(profiles, function() {
+					urlsInput.data('savedValue', urlsInput.val() );
+					activationConditionTextarea.data('editor').markClean();
+					configTextarea.data('editor').markClean();
+					
+					if (callback) {
 	 					callback();
 	 				}
-	 			});
+				});
  			}
  			
 		 	function switchProfile(idx) {
-		 		var activeProfileEl = profilesList.find('li.active');
-		 		
-	 			if (activeProfileEl.length && (!activationConditionTextarea.data('editor').isClean() || !configTextarea.data('editor').isClean() ) && confirm('Save changes in the current profile?') ) {
+	 			if (currentProfileIdx != -1 && (urlsInput.data('savedValue') != urlsInput.val() || !activationConditionTextarea.data('editor').isClean() || !configTextarea.data('editor').isClean() ) && confirm('Save changes in the current profile?') ) {
  					form.submit();
 	 			}
 	 			
-	 			if (activeProfileEl.length) {
-	 				activeProfileEl.removeClass('active');
-		 			profiles[activeProfileEl.index()].active = false;
+	 			if (currentProfileIdx != -1) {
+	 				profilesList.find('li').removeClass('current');
 	 			}
 		 		
-		 		profilesList.find('li:eq(' + idx + ')').addClass('active');
-		 		profiles[idx].active = true;
+		 		profilesList.find('li:eq(' + idx + ')').addClass('current');
 		 		
+		 		urlsInput.val(profiles[idx].urls);
 	 			activationConditionTextarea.data('editor').setValue(profiles[idx].activationCondition);
 	 			configTextarea.data('editor').setValue(profiles[idx].config);
+	 			
+	 			currentProfileIdx = idx;
 	 			
 	 			saveSettings();
 	 		}
 	 		
- 			profiles.forEach(function(profile) {
- 				var profileEl = $('<li><a>' + profile.title + '</a></li>');
- 				
- 				if (profile.active) {
- 					profileEl.addClass('active');
- 				}
- 				
- 				profilesList.append(profileEl);
+	 		activationConditionTextarea.data({
+ 				'default': defaults.activationCondition,
+ 				editor: CodeMirror.fromTextArea(activationConditionTextarea[0], {
+	 				indentWithTabs: true,
+	 				tabSize: 2
+	 			})
  			});
  			
+ 			configTextarea.data({
+ 				'default': defaults.config,
+ 				editor: CodeMirror.fromTextArea(configTextarea[0], {
+	 				indentWithTabs: true,
+	 				tabSize: 2,
+	 				matchBrackets: true
+	 			})
+ 			});
+	 		
+	 		// building the list of defined profiles
+ 			profiles.forEach(function(profile, idx) {
+ 				var profileListEl = $('<li><a>' + profile.title + '</a></li>');
+ 				
+ 				if (profile.urls) {
+ 					profileListEl.addClass('tied');
+ 				} else {
+ 					profileListEl.addClass('untied');
+ 				}
+ 				
+ 				profileListEl.appendTo(profilesList);
+ 				
+ 				if (profile.active) {
+ 					switchProfile(idx);
+ 				}
+ 			});
+ 			
+ 			// there should be no option to delete the only profile
  			if (profilesList.find('li').length == 1) {
 				profilesContainer.find('a.delete').hide();
 			}
@@ -85,7 +126,8 @@ var options = {
 	 				profiles.push({
 	 					title: title,
 	 					config: 'var config = {\r\n\t\r\n}',
-	 					activationCondition: ''
+	 					activationCondition: '',
+	 					urls: ''
 	 				});
 	 				
 	 				profilesContainer.find('a.delete').show();
@@ -97,13 +139,13 @@ var options = {
 	 		});
  			
  			profilesContainer.find('a.rename').click(function() {
-	 			var activeProfileEl = profilesContainer.find('li.active'), activeProfile = profiles[activeProfileEl.index()],
-	 				newTitle = prompt('New title:', activeProfile.title);
+	 			var currentProfileEl = profilesContainer.find('li.current'),
+	 				newTitle = prompt('New title:', profiles[currentProfileIdx].title);
 	 			
 	 			if (newTitle) {
-	 				activeProfile.title = newTitle;
-	 				activeProfileEl.find('a').text(newTitle);
-	 				backgroundPage.setProfiles(profiles);
+	 				profiles[currentProfileIdx].title = newTitle;
+	 				currentProfileEl.find('a').text(newTitle);
+	 				saveSettings();
 	 			}
 	 			
 	 			return false;
@@ -111,15 +153,16 @@ var options = {
 	 		
 	 		profilesContainer.find('a.delete').click(function() {
 	 			if (confirm('Are you shure?')) {
-	 				var link = $(this), activeProfileEl = profilesContainer.find('li.active');
+	 				var link = $(this), currentProfileEl = profilesContainer.find('li.current');
 	 				
-	 				profiles.splice(activeProfileEl.index(), 1);
-	 				activeProfileEl.remove();
+	 				profiles.splice(currentProfileIdx, 1);
+	 				currentProfileEl.remove();
 	 				
-	 				if (profilesContainer.find('ul.profiles li').length == 1) {
+	 				if (profiles.length == 1) {
 	 					link.hide();
 	 				}
 	 				
+	 				currentProfileIdx = -1;	 				
 	 				switchProfile(profiles.length - 1);
 	 			}
 	 			
@@ -141,34 +184,13 @@ var options = {
 	 			
 	 			return false;
 	 		});
-			
-			backgroundPage.getOptions(function(result) {
-	 			activationConditionTextarea.val(result.activationCondition).data({
-	 				'default': result.defaults.activationCondition,
-	 				editor: CodeMirror.fromTextArea(activationConditionTextarea[0], {
-		 				indentWithTabs: true,
-		 				tabSize: 2
-		 			})
-	 			});
-	 			
-	 			configTextarea.val(result.config).data({
-	 				'default': result.defaults.config,
-	 				editor: CodeMirror.fromTextArea(configTextarea[0], {
-		 				indentWithTabs: true,
-		 				tabSize: 2,
-		 				matchBrackets: true
-		 			})
-	 			});
-	 			
-	 			configTextarea.data('editor').on('cursorActivity', function() {
-	 				configTextarea.data('editor').matchHighlight("CodeMirror-matchhighlight");
-	 			})
-	 			
-	 			activationConditionTextarea.data('editor').markClean();
-	 			configTextarea.data('editor').markClean();
-	 		});
+ 			
+ 			urlsInput.data('savedValue', urlsInput.val() );
+ 			
+ 			configTextarea.data('editor').on('cursorActivity', function() {
+ 				configTextarea.data('editor').matchHighlight("CodeMirror-matchhighlight");
+ 			});
  		});
- 		
  		
  		$('a.explain').click(function() {
  			$('div.explain:eq(' + $('a.explain').index(this) + ')').toggle();
