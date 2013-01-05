@@ -12,7 +12,7 @@ defaults.profiles = [{
 	active: true,
 	config: defaults.config,
 	activationCondition: defaults.activationCondition,
-	//urls: ''
+	urls: ''
 }];
 
 function resetSettings() {

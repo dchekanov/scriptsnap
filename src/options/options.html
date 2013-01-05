@@ -39,8 +39,8 @@
 								It also helps to reduce complexity in config definition, make it smaller, more readable and efficient.</p>
 								
 							<p>To make current profile universal, just leave this field blank. To make it URL-specific, 
-								put a regular expression matching desirable URLs (extension does matching like this: 
-								<code>new RegExp('<i>field content</i>').test(location.href)</code>).</p>
+								put a regular expression matching desirable URLs.<br />
+								Extension does matching like this: <code>new RegExp('<i>field content</i>').test(location.href)</code>).</p>
 										
 							<p>Here is an example on how to match multiple URLs: <code>(iana.org|w3.org)</code>.</p>
 							
@@ -68,23 +68,15 @@
 								<li><strong>next</strong> - container for nested keys.</li>
 							</ul>
 							
-							<p>When creating complex code, the power of <a href="http://zeptojs.com/" target="_blank">Zepto</a> - a lightweight library with jQuery-compatible API is at your service.</p>
-							
-							<p>New tab with custom url can be opened by passing "openInNewTab" message via <a href="http://developer.chrome.com/extensions/messaging.html">chrome.extension.sendMessage</a>.</p>
-							
-							<p>Limitations:</p>
-							
-							<ul>
-								<li>Chrome API is not available.</li>
-								<li>There are no sync due to the Chrome restrictions on settings data size.</li>
-							</ul>
+							<p>When creating complex code, the power of <a href="http://zeptojs.com/" target="_blank">Zepto</a> - a lightweight library with jQuery-compatible API is at your service.<br />							
+								New tab with custom url can be opened by passing "openInNewTab" message via <a href="http://developer.chrome.com/extensions/messaging.html">chrome.extension.sendMessage</a>.</p>
 							
 						</div>
 						<textarea class="config" name="config" rows="40" cols="80"></textarea>
 					</div>
 					<br />
 					<div>
-						<div class="title"><strong>Activation condition</strong> (<a class="explain" href="#">explain</a> <a class="restore" href="#">restore default</a>):</div>
+						<div class="title"><strong>Activation condition</strong> (<a class="explain" href="#">explain</a>):</div>
 						<div class="explain">
 							<p>This code will be eval()'ed each time you press keyboard button, to determine, if UI panel should be shown and keystrokes started to be processed. Following variables are available:</p>
 							<ul>
@@ -194,7 +186,7 @@
 						<ul>
 							<li>Updated and tuned config editor.</li>
 							<li>For editor to work properly, config definition from now on should be wrapped into 'config' variable. Existing user settings corrected automatically.</li>
-							<li>Уou can now press Ctrl+S to save all options and Ctrl+Shift+F to auto-format config code.</li>
+							<li>You can now press Ctrl+S to save all options and Ctrl+Shift+F to auto-format config code.</li>
 							<li>No more annoying alert after saving.</li>
 						</ul>
 					</li>

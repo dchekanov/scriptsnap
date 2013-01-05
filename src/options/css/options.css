@@ -27,7 +27,7 @@ ul { list-style:disc inside; }
 ol { list-style:decimal inside; }
 	
 	ul li,
-	ol li { margin:0 0 .667em 0; }
+	ol li { margin:0 0 .334em 0; }
 	
 	dl dt { margin:0 0 .335em 1.335em; font-weight:bold; }
 	dl dd { margin:0 0 1.335em 1.335em; }
