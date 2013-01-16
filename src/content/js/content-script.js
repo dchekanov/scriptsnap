@@ -106,13 +106,13 @@ var ext = {
 			} else if (code == 27) {
 				ext.deactivate();
 			} else {
-				ext.nextLevel(key);
+				ext.nextLevel(key, event.shiftKey);
 			}			
 		} else if (!ext.ui.keys || ext.ui.keys && !ext.ui.keys.hasClass('active') ) {
 			// ctrlKey filtration set to prevent ext to popup on Ctrl+C and alike keystrokes
 			if (ext.settings.activationCondition == '' && !event.ctrlKey && ext.key.cur.next[key]) {
 				ext.activate();
-				ext.nextLevel(key);
+				ext.nextLevel(key, event.shiftKey);
 				event.preventDefault();
 			} else if (eval(ext.settings.activationCondition) ) {
 				ext.activate();
@@ -143,7 +143,7 @@ var ext = {
 	/**
 	 * Steps to next level 
 	 */
-	nextLevel: function(key) {
+	nextLevel: function(key, shiftKey) {
 		if (ext.key.cur.next && ext.key.cur.next[key]) {
 			ext.key.prev.push(ext.key.cur);
 			ext.key.cur = ext.key.cur.next[key];
@@ -153,6 +153,11 @@ var ext = {
 			ext.ui.keys.find('li[rel="' + ext.path.join('') + '"]').addClass('active current');
 			
 			ext.ui.keys.find('li[rel="' + ext.path.join('') + '"] input').focus();
+			
+			if (ext.key.cur.instant) {
+				ext.execKey(shiftKey);
+			}
+			
 			event.preventDefault();
 		}
 	},

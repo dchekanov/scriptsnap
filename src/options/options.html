@@ -66,7 +66,11 @@
 								<li><strong>url</strong> - shorthand for command to open URL. Shift + Enter opens it on a new tab.</li>
 								<li><strong>input</strong> - an object with "title" and "exec" properties. Used to add an input field to enter custom parameter for exec function.</li>
 								<li><strong>next</strong> - container for nested keys.</li>
+								<li><strong>instant</strong> - set to true to make binded function to execute instantly on entering this key, without hitting Enter.
+									It is not recommended to use this option with any destructable code.</li>
 							</ul>
+							
+							<p>If you mix <strong>input</strong>, <strong>exec</strong> and <strong>url</strong> properties in a single key definition, only the first one of them will work, in the mentioned order.</p>
 							
 							<p>When creating complex code, the power of <a href="http://zeptojs.com/" target="_blank">Zepto</a> - a lightweight library with jQuery-compatible API is at your service.<br />							
 								New tab with custom url can be opened by passing "openInNewTab" message via <a href="http://developer.chrome.com/extensions/messaging.html">chrome.extension.sendMessage</a>.</p>
@@ -115,6 +119,12 @@
 				
 				<h3> ()</h3>
 				<ol>
+					<li>
+						General:
+						<ul>
+							<li>An ability to instantly execute binded code.</li>
+						</ul>
+					</li>
 					<li>
 						Options page:
 						<ul>
