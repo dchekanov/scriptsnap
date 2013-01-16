@@ -90,7 +90,9 @@ var options = {
 	 			})
  			});
 	 		
-	 		// building the list of defined profiles
+	 		// building the list of defined profiles and determining which one should be loaded to the editors
+	 		var onLoadProfileIdx = -1;
+	 		
  			profiles.forEach(function(profile, idx) {
  				var profileListEl = $('<li><a>' + profile.title + '</a></li>');
  				
@@ -103,10 +105,18 @@ var options = {
  				profileListEl.appendTo(profilesList);
  				
  				if (profile.active) {
- 					switchProfile(idx);
+ 					onLoadProfileIdx = idx;
  				}
  			});
  			
+ 			profiles.some(function(profile, idx) {
+ 				if (profile.urls && new RegExp(profile.urls).test(location.href.match(/from=(.*)/)[1]) ) {
+ 					onLoadProfileIdx = idx;
+ 				}
+ 			});
+ 			
+ 			switchProfile(onLoadProfileIdx == -1 ? 0 : onLoadProfileIdx);
+
  			// there should be no option to delete the only profile
  			if (profilesList.find('li').length == 1) {
 				profilesContainer.find('a.delete').hide();

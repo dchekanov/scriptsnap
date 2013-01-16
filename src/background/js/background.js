@@ -78,8 +78,12 @@ function getOptions(url, callback) {
 // bridge to the Chrome API for content script
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 		if (request.openOptionsPage) {
-			chrome.tabs.create({
-				url: 'options/options.html'
+			chrome.tabs.query({'active': true}, function (tabs) {
+				var url = tabs[0].url;
+				
+				chrome.tabs.create({
+					url: 'options/options.html?from=' + url
+				});
 			});
 		}
 		
