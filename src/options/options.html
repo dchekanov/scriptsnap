@@ -15,6 +15,7 @@
 		<h1>ScriptSnap settings</h1>
 		
 		<a id="sections-toggler">version history</a>
+		<a id="themes-toggler">invert colors</a>
 		
 		<div class="sections">
 			<div class="section config active">
@@ -55,7 +56,7 @@
 					<br />
 					<div>
 						<div class="title"><strong>Configuration</strong> (<a class="explain" href="#">explain</a> <a class="restore" href="#">restore default</a>):</div>
-						<p>This data is not encrypted - refrain from storing passwords etc. There is no syntax validation - in case extension wouldn't activate - check your code. Reload pages after making changes to apply those changes.</p>
+						<p>This data is not encrypted - refrain from storing passwords etc. There is no syntax validation - in case extension wouldn't activate - check your code. Reload pages after making changes to apply those changes. Press Ctrl+Shift+F to auto-format.</p>
 						<div class="explain">
 							
 							<p>Each possible key described as an object which name equals to key name. Key name may be an english letter (there is no dependancy on input language) or a number. List of meaningful properties:</p>
@@ -101,21 +102,22 @@
 					</div>
 					<br />
 					<div class="submit">
-						<input type="submit" value="Save" />
+						<input type="submit" value="Save (Ctrl+S)" />
 					</div>
-				</form>
-				
-				<h3>Tips</h3>
-				<ul>
-					<li>Press Ctrl+S to save all changes.</li>
-					<li>Press Ctrl+Shift+F to auto-format config code.</li>
-				</ul>
-				
-				<h3>Credits</h3>
-				<p>This extension uses <a href="http://zeptojs.com">Zepto</a>, <a href="http://codemirror.net">CodeMirror</a> and <a href="http://jsbeautifier.org">JS Beautifier</a>.</p>
+				</form>				
 			</div>
 			<div class="section history">
 				<h2>Version history</h2>
+				
+				<h3> ()</h3>
+				<ol>
+					<li>
+						Options page:
+						<ul>
+							<li>Dark theme.</li>
+						</ul>
+					</li>
+				</ol>
 				
 				<h3>1.4.1 (21.01.2013)</h3>
 				<ol>
@@ -214,6 +216,7 @@
 				
 				<h3>1.0.0 (17.09.2012)</h3>
 				<p>Initial release.</p>
+				
 			</div>
 		</div>
 		

@@ -223,6 +223,29 @@ var options = {
  			
  			return false;
  		});
+		
+		// switch themes
+		$('#themes-toggler').click(function() {
+			var theme = $('body').is('.dark') ? 'default' : 'dark';
+			
+			$('body').attr('class', theme);
+			
+			configTextarea.data('editor').setOption('theme', theme);
+			activationConditionTextarea.data('editor').setOption('theme', theme);
+			
+			chrome.storage.sync.set({
+				'optionsTheme': theme
+			});
+			
+			return false;
+		});
+		
+		// restoring last used theme
+		chrome.storage.sync.get('optionsTheme', function(response) {
+			$('body').attr('class', response.optionsTheme);
+			configTextarea.data('editor').setOption('theme', response.optionsTheme);
+			activationConditionTextarea.data('editor').setOption('theme', response.optionsTheme);
+		});
  		
  		// shortcuts
  		$(window).keydown(function(event) {
